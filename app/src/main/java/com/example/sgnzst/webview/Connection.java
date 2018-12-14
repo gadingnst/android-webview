@@ -14,10 +14,8 @@ public class Connection {
             NetworkInfo networkInfo = connectivityManager
                     .getActiveNetworkInfo();
 
-            return networkInfo != null && networkInfo.isAvailable()
-                    && networkInfo.isConnected();
-        } else {
-            return false;
+            return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
         }
+        return false;
     }
 }
