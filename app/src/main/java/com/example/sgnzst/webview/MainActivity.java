@@ -1,10 +1,14 @@
 package com.example.sgnzst.webview;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,28 +16,38 @@ public class MainActivity extends AppCompatActivity {
     public final static String ssl = "https";
     public final static String domain = "sutanlab.js.org";
 
-    private WebView mWebView;
+    public static Context mainContext;
+    public static WebView mWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mWebView = (WebView) findViewById(R.id.webview);
+        mainContext = getApplicationContext();
 
-        // Force links and redirects to open in the WebView instead of in a browser
+        mWebView = (WebView) findViewById(R.id.webview);
         mWebView.setWebViewClient(new WebViewClient());
 
-        // Enable Javascript
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        // REMOTE RESOURCE
-        mWebView.loadUrl(ssl+"://"+domain);
+//        webSettings.setAppCacheMaxSize( 5 * 1024 * 1024 ); // 5MB
+//        webSettings.setAppCachePath(mainContext.getCacheDir().getAbsolutePath());
+//        webSettings.setAllowFileAccess(true);
+//        webSettings.setAppCacheEnabled(true);
+//        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+
+        if (Connection.hasConnectivity(this)) {
+            mWebView.loadUrl(ssl+"://"+domain);
+        } else {
+            Toast.makeText(this, "No Connection !", Toast.LENGTH_LONG).show();
+            mWebView.loadUrl("file:///android_asset/noconnection.html");
+        }
+
         mWebView.setWebViewClient(new WebClient());
     }
 
-    // Prevent the back-button from closing the app
     @Override
     public void onBackPressed() {
         if(mWebView.canGoBack()) {
