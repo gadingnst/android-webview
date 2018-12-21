@@ -5,17 +5,19 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 public class Connection {
+    private static final String TAG = Connection.class.getSimpleName();
+    public static boolean hasConnectivity(Context context){
+        NetworkInfo info = (NetworkInfo) ((ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        if (info == null){
+            return false;
+        }else{
+            if(info.isConnected()){
+                return true;
+            }else{
+                return true;
+            }
 
-    public static boolean hasConnectivity(Context context) {
-        if (context != null) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) context
-                    .getApplicationContext().getSystemService(
-                            Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = connectivityManager
-                    .getActiveNetworkInfo();
-
-            return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
         }
-        return false;
     }
 }
